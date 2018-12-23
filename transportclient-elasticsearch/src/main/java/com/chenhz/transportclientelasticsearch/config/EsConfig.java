@@ -19,21 +19,7 @@ import java.net.UnknownHostException;
 @Slf4j
 @Configuration
 public class EsConfig {
-  /*  @Value("${app.es.ip}")
-    private String hostName;
 
-    @Value("${app.es.port}")
-    private String port;
-
-    @Value("${app.es.cluster}")
-    private String clusterName;
-
-    *//**
-     * 连接池
-     *//*
-    @Value("${app.es.pool}")
-    private String poolSize;
-*/
     @Autowired
     EsConfigProps esConfigProps;
 

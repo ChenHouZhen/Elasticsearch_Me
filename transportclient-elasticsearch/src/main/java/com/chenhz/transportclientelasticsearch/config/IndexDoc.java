@@ -4,10 +4,10 @@ import lombok.Data;
 
 /**
  * @author CHZ
- * @create 2018/12/22
+ * @create 2018/12/23
  */
 @Data
-public class Index {
+public class IndexDoc {
     private String name;
     private String type;
 }

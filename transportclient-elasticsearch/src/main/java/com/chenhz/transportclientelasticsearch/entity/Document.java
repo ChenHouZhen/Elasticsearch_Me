@@ -11,4 +11,5 @@ public class Document {
     private String title;
     private String subject;
     private String content;
+    private Data createTime;
 }
