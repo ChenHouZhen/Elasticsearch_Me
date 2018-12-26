@@ -1,6 +1,7 @@
 package com.chenhz.transportclientelasticsearch.controller;
 
 import com.chenhz.transportclientelasticsearch.config.EsConfigProps;
+import com.chenhz.transportclientelasticsearch.config.IndexConfigProps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +19,13 @@ public class HelloController {
     @Autowired
     EsConfigProps configProps;
 
+    @Autowired
+    IndexConfigProps indexConfigProps;
+
     @GetMapping("/hi")
     @ApiOperation(value = "HI")
     public String hi(){
-        return configProps.toString();
+        return configProps.toString() + "     " +
+                "" +indexConfigProps.toString();
     }
 }

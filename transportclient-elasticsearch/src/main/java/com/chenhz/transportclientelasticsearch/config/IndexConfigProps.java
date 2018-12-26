@@ -1,6 +1,7 @@
 package com.chenhz.transportclientelasticsearch.config;
 
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
@@ -12,12 +13,13 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties("app.index")
+@ToString
 public class IndexConfigProps {
 
     @NestedConfigurationProperty
-    private IndexDoc indexDoc = new IndexDoc();
+    private Doc doc = new Doc();
 
 
     @NestedConfigurationProperty
-    private IndexTime indexTime = new IndexTime();
+    private Time time = new Time();
 }

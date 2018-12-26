@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2018/12/23
  */
 @Data
-public class IndexTime {
+public class Time {
     private String name;
     private String type;
 }

@@ -23,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Component
 @Slf4j
@@ -39,20 +42,26 @@ public class TimeDao {
     private TransportClient client;
 
 
-    public String createTime(Time d){
-        IndexRequest request = new IndexRequest(props.getIndexTime().getName()
-                ,props.getIndexTime().getType());
-        request.source(JSON.toJSON(d),XContentType.JSON);
-        IndexResponse response = (IndexResponse) client.index(request);
+    public String createTime(Time d) throws ExecutionException, InterruptedException {
+        IndexRequest request = new IndexRequest(props.getTime().getName()
+                ,props.getTime().getType());
+        request.source(JSON.toJSON(d), XContentType.JSON);
+        IndexResponse response = null;
+
+        response = client.index(request).get();
+/*        IndexResponse indexResponse = client
+                .prepareIndex("map","ddd","2")
+                .setSource(map)
+                .get();*/
         return response.getId();
     }
 
 
-    public String updateTime(Time d){
-        UpdateRequest request = new UpdateRequest(props.getIndexTime().getName(),
-                props.getIndexTime().getType(),d.getId())
+    public String updateTime(Time d) throws ExecutionException, InterruptedException {
+        UpdateRequest request = new UpdateRequest(props.getTime().getName(),
+                props.getTime().getType(),d.getId())
                 .doc(JSON.toJSON(d),XContentType.JSON);
-        UpdateResponse response = (UpdateResponse) client.update(request);
+        UpdateResponse response = client.update(request).get();
         return response.getId();
     }
 
@@ -73,8 +82,8 @@ public class TimeDao {
     }
 
     public void DeleteDocument(String id){
-        DeleteRequest request = new DeleteRequest(props.getIndexTime().getName(),
-                props.getIndexTime().getType(),id);
+        DeleteRequest request = new DeleteRequest(props.getTime().getName(),
+                props.getTime().getType(),id);
         client.delete(request);
     }
 
@@ -83,8 +92,8 @@ public class TimeDao {
         List<Time> result = new ArrayList<>();
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.query(builder);
-        SearchRequest searchRequest = new SearchRequest(props.getIndexTime().getName(),
-                props.getIndexTime().getType());
+        SearchRequest searchRequest = new SearchRequest(props.getTime().getName(),
+                props.getTime().getType());
         searchRequest.source(sourceBuilder);
 
         SearchResponse searchResponse = (SearchResponse) client.search(searchRequest);

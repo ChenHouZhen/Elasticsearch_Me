@@ -14,7 +14,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <elastic.version>6.5.3</elastic.version>
+        <elastic.version>6.4.3</elastic.version>
     </properties>
 
     <dependencies>
@@ -43,11 +43,11 @@
         </dependency>
 
         <!--6.5.3 版本需要这个包-->
-        <dependency>
-            <groupId>org.elasticsearch.plugin</groupId>
-            <artifactId>transport-netty4-client</artifactId>
-            <version>${elastic.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch.plugin</groupId>-->
+            <!--<artifactId>transport-netty4-client</artifactId>-->
+            <!--<version>${elastic.version}</version>-->
+        <!--</dependency>-->
 
         <!-- SpringBoot 配置 -->
         <!--<dependency>-->

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/time")
@@ -30,9 +31,10 @@ public class TimeController {
 
     @PostMapping("/add")
     @ApiModelProperty("新增")
-    public Time add(Time t){
+    public Time add(Time t) throws ExecutionException, InterruptedException {
         t.setId(UUIDGenerate.create());
         t.setUpdateTime(new Date());
+        t.setCreateTime(new Date());
         timeDao.createTime(t);
         return t;
     }
