@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class IndexController {
 
-
     @Autowired
     EsIndexUtils esIndexUtils;
 
