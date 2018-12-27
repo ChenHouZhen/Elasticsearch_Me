@@ -19,7 +19,4 @@ public class IndexConfigProps {
     @NestedConfigurationProperty
     private Doc doc = new Doc();
 
-
-    @NestedConfigurationProperty
-    private Time time = new Time();
 }

@@ -3,7 +3,9 @@ package com.chenhz.transportclientelasticsearch.entity;
 import lombok.Data;
 
 @Data
-public class Test {
+public class Node {
 
-    private Long l;
+    private String kgId;
+
+    private String kgName;
 }

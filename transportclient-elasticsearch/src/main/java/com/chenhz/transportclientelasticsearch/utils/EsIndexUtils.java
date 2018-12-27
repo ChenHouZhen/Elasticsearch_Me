@@ -2,6 +2,7 @@ package com.chenhz.transportclientelasticsearch.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -25,7 +26,7 @@ public class EsIndexUtils {
      */
     public boolean createIndex(String index){
         if (isExistIndex(index)){
-            log.warn("create index false ... Index >>> [{}] is already exists ! ");
+            log.warn("create index false ... Index >>> [{}] is already exists ! " , index);
             return true;
         }
         CreateIndexResponse indexResponse = client
@@ -49,16 +50,16 @@ public class EsIndexUtils {
                 .exists(new IndicesExistsRequest(index))
                 .actionGet();
         boolean isExist = indicesExistsResponse.isExists();
-        log.info("Index >>> [{}] is exist ? :[{}]",index,isExist);
+        log.info("Index >>> [{}] is exist ? :[{}]" , index , isExist);
         return isExist;
     }
 
     /**
      * 删除索引
      */
-   /* public boolean deleteIndex(String index){
+    public boolean deleteIndex(String index){
         if (!isExistIndex(index)){
-            log.warn("delete index false,because index >>> [{}] is not exist!",index);
+            log.warn("delete index false, because index >>> [{}] is not exist!",index);
             return true;
         }
 
@@ -71,5 +72,5 @@ public class EsIndexUtils {
         boolean result  = deleteIndexResponse.isAcknowledged();
         log.info("delete Index >>> [{}] successfully ?",result);
         return result;
-    }*/
+    }
 }
