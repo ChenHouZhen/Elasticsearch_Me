@@ -1,5 +1,6 @@
 package com.chenhz.transportclientelasticsearch.config;
 
+import com.chenhz.transportclientelasticsearch.entity.Es;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

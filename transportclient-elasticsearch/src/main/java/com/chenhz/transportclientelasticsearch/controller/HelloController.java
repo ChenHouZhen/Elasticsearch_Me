@@ -2,6 +2,8 @@ package com.chenhz.transportclientelasticsearch.controller;
 
 import com.chenhz.transportclientelasticsearch.config.EsConfigProps;
 import com.chenhz.transportclientelasticsearch.config.IndexConfigProps;
+import com.chenhz.transportclientelasticsearch.entity.R;
+import com.chenhz.transportclientelasticsearch.utils.DocumentGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
@@ -24,11 +26,21 @@ public class HelloController {
     @Autowired
     IndexConfigProps indexConfigProps;
 
+    @Autowired
+    private DocumentGenerator documentGenerator;
+
     @GetMapping("/hi")
     @ApiOperation(value = "HI")
     public String hi(){
         return configProps.toString() + "     " +
                 "" +indexConfigProps.toString();
+    }
+
+
+    @GetMapping("/document")
+    @ApiOperation(value = "随机获取 Document 对象")
+    public R documents(){
+        return R.ok().put("data",documentGenerator.create());
     }
 
 
