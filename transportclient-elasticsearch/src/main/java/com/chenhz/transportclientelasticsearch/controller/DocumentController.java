@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("doc")
@@ -38,7 +37,7 @@ public class DocumentController {
 
     @PostMapping("/add")
     @ApiModelProperty("新增")
-    public Document add(Document t) throws ExecutionException, InterruptedException {
+    public Document add(Document t){
         t.setId(UUIDGenerate.create());
         t.setUpdateTime(new Date());
         t.setCreateTime(new Date());
