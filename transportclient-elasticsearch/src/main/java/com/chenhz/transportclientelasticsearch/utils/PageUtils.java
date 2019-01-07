@@ -18,7 +18,7 @@ import java.util.List;
 public class PageUtils implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//总记录数
-	private int totalCount;
+	private long totalCount;
 	//每页记录数
 	private int pageSize;
 	//总页数
@@ -35,7 +35,7 @@ public class PageUtils implements Serializable {
 	 * @param pageSize    每页记录数
 	 * @param currPage    当前页数
 	 */
-	public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
+	public PageUtils(List<?> list, long totalCount, int pageSize, int currPage) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageSize;

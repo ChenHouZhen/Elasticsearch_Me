@@ -9,11 +9,9 @@ import com.chenhz.transportclientelasticsearch.utils.UUIDGenerate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,10 +45,23 @@ public class DocumentController {
     }
 
 
-    @GetMapping("/all")
-    @ApiModelProperty("查询全部")
-    public List<Document> all(){
-        return documentDao.matchAllQuery();
+    @GetMapping("/page")
+    @ApiModelProperty("分页")
+    public R all(int page ,int limit){
+        return R.ok().put("data",documentDao.page(limit,page));
+    }
+
+
+    @GetMapping("/filter")
+    @ApiModelProperty("过滤")
+    public R filter(String kgId,String kgName,Integer status){
+        return R.ok().put("data",documentDao.filter(kgName,kgId,status));
+    }
+
+    @GetMapping("/groupBy")
+    @ApiModelProperty("过滤")
+    public R groupBy(String field,String order){
+        return R.ok().put("data",documentDao.groupBy(field,order));
     }
 
     @PostMapping("/add")

@@ -3,8 +3,6 @@ package com.chenhz.transportclientelasticsearch.entity;
  * Created by hakdogan on 01/12/2017
  */
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.chenhz.transportclientelasticsearch.utils.TimeHelper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,10 +25,10 @@ public class Document {
     private String title;
     private String content;
 
-    // 三个不同类型的时间
+    private Integer status;
+
     private Date createTime;
     private String updateTime;
-    //private Long checkTime;
 
     private List<Node> kgs;
 
