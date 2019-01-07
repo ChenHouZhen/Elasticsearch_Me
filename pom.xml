@@ -45,6 +45,19 @@
 			<version>${fastjson.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
+		</dependency>
+
+		<!-- 随机数生成器-->
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>0.16</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

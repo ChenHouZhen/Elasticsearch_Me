@@ -1,4 +1,4 @@
-package com.chenhz.transportclientelasticsearch.config;
+package com.chenhz.transportclientelasticsearch.entity;
 
 import lombok.Data;
 

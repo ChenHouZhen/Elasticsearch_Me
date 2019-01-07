@@ -1,11 +1,15 @@
 package com.chenhz.transportclientelasticsearch.dao;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.chenhz.transportclientelasticsearch.config.IndexConfigProps;
 import com.chenhz.transportclientelasticsearch.entity.Document;
 import com.chenhz.transportclientelasticsearch.utils.EsQueryUtils;
+import com.chenhz.transportclientelasticsearch.utils.JsonUtils;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -21,6 +25,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,26 +49,26 @@ public class DocumentDao {
     @Autowired
     private TransportClient client;
 
-
-    public String createTime(Document d) throws ExecutionException, InterruptedException {
-        IndexRequest request = new IndexRequest(props.getDoc().getName()
-                ,props.getDoc().getType());
-        request.source(JSON.toJSON(d), XContentType.JSON);
-        IndexResponse response = null;
-
-        response = client.index(request).get();
-/*        IndexResponse indexResponse = client
-                .prepareIndex("map","ddd","2")
-                .setSource(map)
-                .get();*/
+    public String createDocument(Document d){
+        IndexResponse response = client.prepareIndex(props.getDoc().getName(),props.getDoc().getType())
+                .setId(d.getId())
+                .setSource(JsonUtils.toJsonStr(d),XContentType.JSON).get();
         return response.getId();
     }
 
+    public Document searchById(String id){
+        GetResponse response = client.prepareGet(props.getDoc().getName(),
+                props.getDoc().getType(),
+                id).get();
+        return JSON.parseObject(response.getSourceAsString(),Document.class);
+    }
 
-    public String updateTime(Document d) throws ExecutionException, InterruptedException {
+
+
+    public String updateDocument(Document d) throws ExecutionException, InterruptedException {
         UpdateRequest request = new UpdateRequest(props.getDoc().getName(),
                 props.getDoc().getType(),d.getId())
-                .doc(JSON.toJSON(d),XContentType.JSON);
+                .doc(JsonUtils.toJsonStr(d),XContentType.JSON);
         UpdateResponse response = client.update(request).get();
         return response.getId();
     }

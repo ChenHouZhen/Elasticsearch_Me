@@ -1,5 +1,6 @@
 package com.chenhz.transportclientelasticsearch.config;
 
+import com.chenhz.transportclientelasticsearch.entity.Doc;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
