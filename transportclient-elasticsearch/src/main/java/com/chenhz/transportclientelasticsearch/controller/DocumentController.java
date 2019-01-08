@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("doc")
-@Api(tags = "Document")
+@Api(tags = "Document数据")
 public class DocumentController {
 
     @Autowired

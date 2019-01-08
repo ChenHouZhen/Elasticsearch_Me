@@ -38,7 +38,7 @@ public class HelloController {
 
 
     @GetMapping("/document")
-    @ApiOperation(value = "随机获取 Document 对象")
+    @ApiOperation(value = "随机获取 EsDocument 对象")
     public R documents(){
         return R.ok().put("data",documentGenerator.create());
     }
