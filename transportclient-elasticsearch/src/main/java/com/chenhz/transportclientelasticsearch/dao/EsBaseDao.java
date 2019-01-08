@@ -8,6 +8,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -70,6 +71,16 @@ public class EsBaseDao<T> {
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         log.info("查询："+searchRequestBuilder);
         log.info("条件："+wrapper.getBoolQueryBuilder());
+        log.info("响应："+searchResponse);
+        return this.data(searchResponse);
+    }
+
+    public List<T> selectList(BoolQueryBuilder boolQueryBuilder){
+        SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
+        searchRequestBuilder.setQuery(boolQueryBuilder);
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+        log.info("查询："+searchRequestBuilder);
+        log.info("条件："+boolQueryBuilder);
         log.info("响应："+searchResponse);
         return this.data(searchResponse);
     }
