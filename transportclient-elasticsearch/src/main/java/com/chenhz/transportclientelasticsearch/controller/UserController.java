@@ -3,7 +3,6 @@ package com.chenhz.transportclientelasticsearch.controller;
 import com.chenhz.transportclientelasticsearch.dao.UserDao;
 import com.chenhz.transportclientelasticsearch.entity.R;
 import com.chenhz.transportclientelasticsearch.entity.User;
-import com.chenhz.transportclientelasticsearch.utils.EntityWrapper;
 import com.chenhz.transportclientelasticsearch.utils.UUIDGenerate;
 import com.chenhz.transportclientelasticsearch.utils.UserGenerator;
 import io.swagger.annotations.Api;
@@ -29,10 +28,9 @@ public class UserController {
     private UserGenerator userGenerator;
 
 
-    @GetMapping("/info")
+    @GetMapping("/info/id")
     public R info(String id){
-//        return userDao.searchById(id);
-        return null;
+        return R.ok().put("data",userDao.selectById(id));
     }
 
     @GetMapping("/generate")
@@ -43,13 +41,40 @@ public class UserController {
         return R.ok().put("data",docs);
     }
 
-    @GetMapping("/list")
-    @ApiModelProperty("分页")
-    public R list(String name){
-        List<User> users = userDao.selectList(
-                new EntityWrapper<User>(new User()).eq("name.keyword",name)
-        );
-        return R.ok().put("data",users);
+    @GetMapping("/list/eq")
+    @ApiModelProperty("根据名称精确查")
+    public R listEq(String name){
+        return R.ok().put("data",userDao.listEqByName(name));
+    }
+
+    @GetMapping("/list/like")
+    @ApiModelProperty("根据名称模糊查")
+    public R listLike(String name){
+        return R.ok().put("data",userDao.listLikeByName(name));
+    }
+
+    @GetMapping("/info/phone")
+    @ApiModelProperty("根据手机号精确查")
+    public R infoPhone(String phone){
+        return R.ok().put("data",userDao.searchByPhone(phone));
+    }
+
+    @GetMapping("/list/ornew")
+    @ApiModelProperty("根据名称、手机 orNew  精确查 ")
+    public R listOrNew(String name,String phone,Integer sex){
+        return R.ok().put("data",userDao.listByNameOrNewPhoneSex(name,phone,sex));
+    }
+
+    @GetMapping("/list/or")
+    @ApiModelProperty("根据名称、手机 or  精确查 ")
+    public R listOr(String name,String phone){
+        return R.ok().put("data",userDao.listByNameOrPhone(name,phone));
+    }
+
+    @GetMapping("/list/and")
+    @ApiModelProperty("根据名称、手机 and  精确查 ")
+    public R listAnd(String name,String phone){
+        return R.ok().put("data",userDao.listByNameAndPhone(name,phone));
     }
 
     @PostMapping("/add")
@@ -59,7 +84,5 @@ public class UserController {
         userDao.addUser(user);
         return R.ok().put("data",user);
     }
-
-
 
 }

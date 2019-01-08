@@ -20,7 +20,7 @@ import java.util.List;
 public class EsBaseDao<T> {
 
     @Autowired
-    private TransportClient client;
+    protected TransportClient client;
 
 
     public T selectById(String id){
@@ -59,31 +59,33 @@ public class EsBaseDao<T> {
     }
 
 
-    protected SearchRequestBuilder initReflect(){
+    protected SearchRequestBuilder getSearchRequestBuilder(){
         return client.prepareSearch(this.getEsDocument().index()).setTypes(this.getEsDocument().type());
     }
 
 
-
     public List<T> selectList(EntityWrapper<T> wrapper){
-        SearchRequestBuilder searchRequestBuilder =null;
+        SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
+        searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
-        return this.data(searchResponse, (Class<T>) wrapper.getEntity().getClass());
+        log.info("查询："+searchRequestBuilder);
+        log.info("条件："+wrapper.getBoolQueryBuilder());
+        log.info("响应："+searchResponse);
+        return this.data(searchResponse);
     }
 
 
-    private List<T> data(SearchResponse searchResponse,Class<T> tClass){
+    private List<T> data(SearchResponse searchResponse){
         List<T> data = new ArrayList<>();
         for (SearchHit searchHit:searchResponse.getHits().getHits()) {
-            T t = JSON.parseObject(searchHit.getSourceAsString(),tClass);
-//            t.setId(searchHit.getId());
+            T t = JSON.parseObject(searchHit.getSourceAsString(),getEntityClass());
             data.add(t);
         }
         return data;
     }
 
     public static <E> E getObject(List<E> list) {
-        if (CollectionUtils.isEmpty(list)) {
+        if (!CollectionUtils.isEmpty(list)) {
             int size = list.size();
             if (size > 1) {
                 log.warn(String.format("Warn: execute Method There are  %s results.", size));
