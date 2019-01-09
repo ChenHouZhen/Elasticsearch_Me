@@ -82,8 +82,10 @@ public class EsBaseDao<T> {
 
     public List<T> selectList(EntityWrapper<T> wrapper){
         SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
-        wrapper.setSearchRequestBuilder(searchRequestBuilder);
         searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
+        if (wrapper.getSort()){
+            searchRequestBuilder.addSort(wrapper.getSortBuilder());
+        }
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         log.info("查询："+searchRequestBuilder);
         log.info("条件："+wrapper.getBoolQueryBuilder());

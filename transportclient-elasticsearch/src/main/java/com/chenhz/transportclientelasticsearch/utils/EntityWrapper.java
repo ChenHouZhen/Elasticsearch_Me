@@ -3,6 +3,11 @@ package com.chenhz.transportclientelasticsearch.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import java.io.Serializable;
@@ -18,33 +23,32 @@ public class EntityWrapper<T> implements Serializable {
 
     protected BoolQueryBuilder boolQueryBuilder;
 
+    private Boolean sort = Boolean.FALSE;
 
-    private SearchRequestBuilder searchRequestBuilder;
+    protected SortBuilder sortBuilder;
+
+    public Boolean getSort() {
+        return sort;
+    }
+
+    public SortBuilder getSortBuilder() {
+        return sortBuilder;
+    }
 
 
     public BoolQueryBuilder getBoolQueryBuilder() {
         return boolQueryBuilder;
     }
 
-    public SearchRequestBuilder getSearchRequestBuilder() {
-        return searchRequestBuilder;
-    }
-
-    public void setSearchRequestBuilder(SearchRequestBuilder searchRequestBuilder) {
-        this.searchRequestBuilder = searchRequestBuilder;
-    }
 
     public EntityWrapper() {
         init();
-        /* 注意，传入查询参数 */
     }
 
 
     private void init(){
         // 初始化复杂查询构造器
         this.boolQueryBuilder = QueryBuilders.boolQuery();
-       // this.client = SpringContextUtil.getBean(TransportClient.class);
-        //this.searchRequestBuilder = client.prepareSearch();
     }
 
 
@@ -155,12 +159,6 @@ public class EntityWrapper<T> implements Serializable {
     }
 
 
-    public EntityWrapper<T> groupBy(String columns) {
-
-        return this;
-    }
-
-
     public EntityWrapper<T> like(String column, String value) {
         // 根据 词 不分隔模糊匹配
         MatchPhraseQueryBuilder whereLikeCql= QueryBuilders.matchPhraseQuery(column,value);
@@ -182,7 +180,9 @@ public class EntityWrapper<T> implements Serializable {
     }
 
     public EntityWrapper<T> orderBy(String columns, Boolean isAsc) {
-        this.searchRequestBuilder.addSort(columns, isAsc? SortOrder.ASC : SortOrder.DESC);
+        this.sort = Boolean.TRUE;
+        this.sortBuilder = SortBuilders.fieldSort(columns);
+        this.sortBuilder.order(isAsc? SortOrder.ASC : SortOrder.DESC);
         return this;
     }
 
