@@ -34,6 +34,7 @@ public class EsBaseDao<T> {
     public List<T> listByIds(String... ids){
         SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
         EntityWrapper<T> wrapper = new EntityWrapper<>();
+//        wrapper.setSearchRequestBuilder(searchRequestBuilder);
         wrapper.ids(ids);
         searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
@@ -81,6 +82,7 @@ public class EsBaseDao<T> {
 
     public List<T> selectList(EntityWrapper<T> wrapper){
         SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
+        wrapper.setSearchRequestBuilder(searchRequestBuilder);
         searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         log.info("查询："+searchRequestBuilder);

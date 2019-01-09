@@ -101,6 +101,12 @@ public class UserController {
         return R.ok().put("data",userDao.listByInAge(Arrays.asList(ages)));
     }
 
+    @GetMapping("/order/ages")
+    @ApiOperation("根据年龄列表查 ")
+    public R orderByAges(boolean isAsc){
+        return R.ok().put("data",userDao.listOrderByAge(isAsc));
+    }
+
     @PostMapping("/add")
     @ApiOperation("索引新数据")
     public R add(User user){

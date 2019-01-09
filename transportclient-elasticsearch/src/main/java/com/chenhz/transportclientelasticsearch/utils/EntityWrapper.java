@@ -2,8 +2,8 @@ package com.chenhz.transportclientelasticsearch.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.sort.SortOrder;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -21,7 +21,6 @@ public class EntityWrapper<T> implements Serializable {
 
     private SearchRequestBuilder searchRequestBuilder;
 
-    private TransportClient client;
 
     public BoolQueryBuilder getBoolQueryBuilder() {
         return boolQueryBuilder;
@@ -29,6 +28,10 @@ public class EntityWrapper<T> implements Serializable {
 
     public SearchRequestBuilder getSearchRequestBuilder() {
         return searchRequestBuilder;
+    }
+
+    public void setSearchRequestBuilder(SearchRequestBuilder searchRequestBuilder) {
+        this.searchRequestBuilder = searchRequestBuilder;
     }
 
     public EntityWrapper() {
@@ -40,8 +43,8 @@ public class EntityWrapper<T> implements Serializable {
     private void init(){
         // 初始化复杂查询构造器
         this.boolQueryBuilder = QueryBuilders.boolQuery();
-        this.client = SpringContextUtil.getBean(TransportClient.class);
-        this.searchRequestBuilder = client.prepareSearch();
+       // this.client = SpringContextUtil.getBean(TransportClient.class);
+        //this.searchRequestBuilder = client.prepareSearch();
     }
 
 
@@ -178,9 +181,9 @@ public class EntityWrapper<T> implements Serializable {
         return this;
     }
 
-/*    public EntityWrapper<T> orderBy(SearchRequestBuilder searchRequestBuilder, String columns, Boolean isAsc) {
-        searchRequestBuilder.addSort(columns, isAsc? SortOrder.ASC : SortOrder.DESC);
+    public EntityWrapper<T> orderBy(String columns, Boolean isAsc) {
+        this.searchRequestBuilder.addSort(columns, isAsc? SortOrder.ASC : SortOrder.DESC);
         return this;
-    }*/
+    }
 
 }

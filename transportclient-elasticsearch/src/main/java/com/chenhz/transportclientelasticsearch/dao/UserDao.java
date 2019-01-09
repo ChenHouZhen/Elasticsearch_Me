@@ -3,7 +3,6 @@ package com.chenhz.transportclientelasticsearch.dao;
 import com.chenhz.transportclientelasticsearch.entity.User;
 import com.chenhz.transportclientelasticsearch.utils.EntityWrapper;
 import com.chenhz.transportclientelasticsearch.utils.JsonUtils;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -98,6 +97,14 @@ public class UserDao extends EsBaseDao<User>{
     public List<User> listByInAge(List<Integer> age){
         return this.selectList(
                 new EntityWrapper<User>().in("age",age)
+        );
+    }
+
+
+    // order by age
+    public List<User> listOrderByAge(boolean isAsc){
+        return this.selectList(
+                new EntityWrapper<User>().orderBy("age",isAsc)
         );
     }
 
