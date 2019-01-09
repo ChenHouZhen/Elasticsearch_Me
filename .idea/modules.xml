@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ElasticSearch-Me.iml" filepath="$PROJECT_DIR$/ElasticSearch-Me.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javahighlevelrestclient-elasticsearch/javahighlevelrestclient-elasticsearch.iml" filepath="$PROJECT_DIR$/javahighlevelrestclient-elasticsearch/javahighlevelrestclient-elasticsearch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/transportclient-elasticsearch/transportclient-elasticsearch.iml" filepath="$PROJECT_DIR$/transportclient-elasticsearch/transportclient-elasticsearch.iml" />
+    </modules>
+  </component>
+</project>

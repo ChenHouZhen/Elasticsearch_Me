@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ElasticSearch-Me" />
+        <module name="javahighlevelrestclient-elasticsearch" />
+        <module name="transportclient-elasticsearch" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ElasticSearch-Me" target="1.8" />
+      <module name="javahighlevelrestclient-elasticsearch" target="1.8" />
+      <module name="transportclient-elasticsearch" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
