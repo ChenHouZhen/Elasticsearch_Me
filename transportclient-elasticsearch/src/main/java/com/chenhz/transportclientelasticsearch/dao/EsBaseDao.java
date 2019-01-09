@@ -31,6 +31,20 @@ public class EsBaseDao<T> {
     }
 
 
+    public List<T> listByIds(String... ids){
+        SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
+        EntityWrapper<T> wrapper = new EntityWrapper<>();
+        wrapper.ids(ids);
+        searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+        log.info("查询："+searchRequestBuilder);
+        log.info("条件："+wrapper.getBoolQueryBuilder());
+        log.info("响应："+searchResponse);
+        return this.data(searchResponse);
+    }
+
+
+
     public T selectOne(EntityWrapper<T> wrapper) {
         return this.getObject(this.selectList(wrapper));
     }
@@ -94,6 +108,7 @@ public class EsBaseDao<T> {
         }
         return data;
     }
+
 
     public static <E> E getObject(List<E> list) {
         if (!CollectionUtils.isEmpty(list)) {

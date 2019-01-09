@@ -9,11 +9,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -42,43 +40,69 @@ public class UserController {
     }
 
     @GetMapping("/list/eq")
-    @ApiModelProperty("根据名称精确查")
+    @ApiOperation("根据名称精确查")
     public R listEq(String name){
         return R.ok().put("data",userDao.listEqByName(name));
     }
 
     @GetMapping("/list/like")
-    @ApiModelProperty("根据名称模糊查")
+    @ApiOperation("根据名称模糊查")
     public R listLike(String name){
         return R.ok().put("data",userDao.listLikeByName(name));
     }
 
     @GetMapping("/info/phone")
-    @ApiModelProperty("根据手机号精确查")
+    @ApiOperation("根据手机号精确查")
     public R infoPhone(String phone){
         return R.ok().put("data",userDao.searchByPhone(phone));
     }
 
     @GetMapping("/list/ornew")
-    @ApiModelProperty("根据名称、手机 orNew  精确查 ")
+    @ApiModelProperty("根据名称、手机、 性别   精确查 ")
     public R listOrNew(String name,String phone,Integer sex){
         return R.ok().put("data",userDao.listByNameOrNewPhoneSex(name,phone,sex));
     }
 
     @GetMapping("/list/or")
-    @ApiModelProperty("根据名称、手机 or  精确查 ")
+    @ApiOperation("根据名称、手机 or  精确查 ")
     public R listOr(String name,String phone){
         return R.ok().put("data",userDao.listByNameOrPhone(name,phone));
     }
 
     @GetMapping("/list/and")
-    @ApiModelProperty("根据名称、手机 and  精确查 ")
+    @ApiOperation("根据名称、手机 and  精确查 ")
     public R listAnd(String name,String phone){
         return R.ok().put("data",userDao.listByNameAndPhone(name,phone));
     }
 
+
+    @GetMapping("/list/gtAndLt")
+    @ApiOperation("根据年齡 gt lt 查 ")
+    public R listGtAndLt(Integer lAge,Integer hAge){
+        return R.ok().put("data",userDao.listByGtAndLtAge(lAge,hAge));
+    }
+
+    @GetMapping("/list/gteAndLte")
+    @ApiOperation("根据年齡 gte lte 查 ")
+    public R listGteAndLte(Integer lAge,Integer hAge){
+        return R.ok().put("data",userDao.listByGteAndLteAge(lAge,hAge));
+    }
+
+    @GetMapping("/list/ids")
+    @ApiOperation("根据ID列表查 ")
+    public R listByIds(@RequestParam String[] ids){
+        return R.ok().put("data",userDao.listByIds(ids));
+    }
+
+
+    @GetMapping("/list/ages")
+    @ApiOperation("根据年龄列表查 ")
+    public R listByAges(@RequestParam Integer[] ages){
+        return R.ok().put("data",userDao.listByInAge(Arrays.asList(ages)));
+    }
+
     @PostMapping("/add")
-    @ApiModelProperty("索引新数据")
+    @ApiOperation("索引新数据")
     public R add(User user){
         user.setId(UUIDGenerate.create());
         userDao.addUser(user);

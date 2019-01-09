@@ -1,12 +1,12 @@
 package com.chenhz.transportclientelasticsearch.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.index.query.*;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 @Slf4j
 public class EntityWrapper<T> implements Serializable {
@@ -19,8 +19,16 @@ public class EntityWrapper<T> implements Serializable {
     protected BoolQueryBuilder boolQueryBuilder;
 
 
+    private SearchRequestBuilder searchRequestBuilder;
+
+    private TransportClient client;
+
     public BoolQueryBuilder getBoolQueryBuilder() {
         return boolQueryBuilder;
+    }
+
+    public SearchRequestBuilder getSearchRequestBuilder() {
+        return searchRequestBuilder;
     }
 
     public EntityWrapper() {
@@ -32,7 +40,10 @@ public class EntityWrapper<T> implements Serializable {
     private void init(){
         // 初始化复杂查询构造器
         this.boolQueryBuilder = QueryBuilders.boolQuery();
+        this.client = SpringContextUtil.getBean(TransportClient.class);
+        this.searchRequestBuilder = client.prepareSearch();
     }
+
 
 
     public EntityWrapper<T> eq(String column, Object params) {
@@ -65,11 +76,78 @@ public class EntityWrapper<T> implements Serializable {
      * </p>
      *
      */
-    public EntityWrapper<T> orNew(String column, Object params) {
+/*    public EntityWrapper<T> orNew(String column, Object params) {
         BoolQueryBuilder orBoolQueryBuilder = QueryBuilders.boolQuery();
         TermQueryBuilder whereOrCql =  QueryBuilders.termQuery(column,params);
         orBoolQueryBuilder.must(whereOrCql);
         this.boolQueryBuilder.should(orBoolQueryBuilder);
+        return this;
+    }*/
+
+
+    /**
+     * <p>
+     * 等同于SQL的"field>value"表达式
+     * </p>
+     *
+     * @param column
+     * @param params
+     * @return
+     */
+    public EntityWrapper<T> gt(String column, Object params) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(column);
+        rangeQueryBuilder.gt(params);
+        this.boolQueryBuilder.must(rangeQueryBuilder);
+        return this;
+    }
+
+    /**
+     * <p>
+     * 等同于SQL的"field>=value"表达式
+     * </p>
+     *
+     * @param column
+     * @param params
+     * @return
+     */
+    public EntityWrapper<T> ge(String column, Object params) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(column);
+        rangeQueryBuilder.gte(params);
+        this.boolQueryBuilder.must(rangeQueryBuilder);
+        return this;
+    }
+
+    /**
+     * <p>
+     * 等同于SQL的"field<value"表达式
+     * </p>
+     *
+     * @param column
+     * @param params
+     * @return
+     */
+    public EntityWrapper<T> lt(String column, Object params) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(column);
+        rangeQueryBuilder.lt(params);
+        this.boolQueryBuilder.must(rangeQueryBuilder);
+        return this;
+    }
+
+    /**
+     * <p>
+     * 等同于SQL的"field<=value"表达式
+     * </p>
+     *
+     * @param column
+     * @param params
+     * @return
+     */
+    public EntityWrapper<T> le(String column, Object params) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(column);
+        rangeQueryBuilder.lte(params);
+        //或者
+       // rangeQueryBuilder.to(params,Boolean.TRUE);
+        this.boolQueryBuilder.must(rangeQueryBuilder);
         return this;
     }
 
@@ -79,10 +157,6 @@ public class EntityWrapper<T> implements Serializable {
         return this;
     }
 
-    public EntityWrapper<T> orderBy(String columns) {
-
-        return this;
-    }
 
     public EntityWrapper<T> like(String column, String value) {
         // 根据 词 不分隔模糊匹配
@@ -91,9 +165,22 @@ public class EntityWrapper<T> implements Serializable {
         return this;
     }
 
-    public EntityWrapper<T> in(String column, String value) {
-
+    public EntityWrapper<T> in(String column, Collection<?> value) {
+        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery(column,value);
+        this.boolQueryBuilder.must(termQueryBuilder);
         return this;
     }
+
+    public EntityWrapper<T> ids(String... id){
+        IdsQueryBuilder idsQueryBuilder = QueryBuilders.idsQuery();
+        idsQueryBuilder.addIds(id);
+        this.boolQueryBuilder.must(idsQueryBuilder);
+        return this;
+    }
+
+/*    public EntityWrapper<T> orderBy(SearchRequestBuilder searchRequestBuilder, String columns, Boolean isAsc) {
+        searchRequestBuilder.addSort(columns, isAsc? SortOrder.ASC : SortOrder.DESC);
+        return this;
+    }*/
 
 }
