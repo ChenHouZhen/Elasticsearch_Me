@@ -137,6 +137,9 @@ public class DocumentDao {
             // TermQueryBuilder whereKgName =  QueryBuilders.termQuery("kgs.kgName.keyword",kgName);
             // 根据 字 分隔模糊匹配
             // MatchQueryBuilder whereKgName = QueryBuilders.matchQuery("kgs.kgName",kgName);
+
+            // 比下面的厉害
+            //MatchPhrasePrefixQueryBuilder
             // 根据 词 不分隔模糊匹配
             MatchPhraseQueryBuilder whereKgName = QueryBuilders.matchPhraseQuery("kgs.kgName",kgName);
             orBoolQueryBuilder.should(whereKgName);

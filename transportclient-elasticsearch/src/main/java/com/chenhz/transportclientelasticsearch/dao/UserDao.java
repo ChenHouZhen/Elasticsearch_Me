@@ -1,8 +1,10 @@
 package com.chenhz.transportclientelasticsearch.dao;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.chenhz.transportclientelasticsearch.entity.User;
 import com.chenhz.transportclientelasticsearch.utils.EntityWrapper;
 import com.chenhz.transportclientelasticsearch.utils.JsonUtils;
+import com.chenhz.transportclientelasticsearch.utils.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -108,5 +110,11 @@ public class UserDao extends EsBaseDao<User>{
         );
     }
 
+    // like phone = ''%
+    public PageUtils pageByListPhone(String phone, int page, int size){
+        return this.selectPage(
+                new EntityWrapper<User>().like("phone",phone),new Page<>(page,size)
+        );
+    }
 
 }

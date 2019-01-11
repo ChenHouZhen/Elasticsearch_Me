@@ -1,8 +1,10 @@
 package com.chenhz.transportclientelasticsearch.dao;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.chenhz.transportclientelasticsearch.annotation.EsDocument;
 import com.chenhz.transportclientelasticsearch.utils.EntityWrapper;
+import com.chenhz.transportclientelasticsearch.utils.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -10,6 +12,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -34,7 +37,6 @@ public class EsBaseDao<T> {
     public List<T> listByIds(String... ids){
         SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
         EntityWrapper<T> wrapper = new EntityWrapper<>();
-//        wrapper.setSearchRequestBuilder(searchRequestBuilder);
         wrapper.ids(ids);
         searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
@@ -93,6 +95,27 @@ public class EsBaseDao<T> {
         return this.data(searchResponse);
     }
 
+    public PageUtils selectPage(EntityWrapper<T> wrapper,Page<T> page){
+        SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
+        searchRequestBuilder.setQuery(wrapper.getBoolQueryBuilder());
+
+        // 两个方案可以实现排序
+        if (wrapper.getSort()){
+            searchRequestBuilder.addSort(wrapper.getSortBuilder());
+        }
+
+     /*   if (page.isOpenSort() && page.isSearchCount()) {
+            searchRequestBuilder.addSort(page.getOrderByField(),page.isAsc()? SortOrder.ASC : SortOrder.DESC);
+        }*/
+        searchRequestBuilder.setFrom((page.getCurrent() - 1) * page.getSize()).setSize(page.getSize());
+
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+        log.info("查询："+searchRequestBuilder);
+        log.info("条件："+wrapper.getBoolQueryBuilder());
+        log.info("响应："+searchResponse);
+        return this.dataPage(searchResponse,page);
+    }
+
     public List<T> selectList(BoolQueryBuilder boolQueryBuilder){
         SearchRequestBuilder searchRequestBuilder =this.getSearchRequestBuilder();
         searchRequestBuilder.setQuery(boolQueryBuilder);
@@ -101,6 +124,12 @@ public class EsBaseDao<T> {
         log.info("条件："+boolQueryBuilder);
         log.info("响应："+searchResponse);
         return this.data(searchResponse);
+    }
+
+    private PageUtils dataPage(SearchResponse searchResponse, com.baomidou.mybatisplus.plugins.Page<T> page){
+        List<T> data = this.data(searchResponse);
+        long totalCount = searchResponse.getHits().getTotalHits();
+        return new PageUtils(data,totalCount,page.getSize(),page.getCurrent());
     }
 
 

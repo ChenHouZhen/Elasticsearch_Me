@@ -107,6 +107,13 @@ public class UserController {
         return R.ok().put("data",userDao.listOrderByAge(isAsc));
     }
 
+    @GetMapping("/page/like/phone")
+    @ApiOperation("根据手机模糊查 ")
+    public R pageLikePhone(String phone,int page,int size){
+        return R.ok().put("data",userDao.pageByListPhone(phone,page,size));
+    }
+
+
     @PostMapping("/add")
     @ApiOperation("索引新数据")
     public R add(User user){

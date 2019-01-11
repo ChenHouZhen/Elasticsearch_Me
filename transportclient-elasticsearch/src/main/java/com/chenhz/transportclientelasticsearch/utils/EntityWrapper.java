@@ -16,10 +16,6 @@ import java.util.Collection;
 @Slf4j
 public class EntityWrapper<T> implements Serializable {
 
-    /**
-     * ES 映射实体类
-     */
-   // protected T entity = null;
 
     protected BoolQueryBuilder boolQueryBuilder;
 
@@ -29,6 +25,10 @@ public class EntityWrapper<T> implements Serializable {
 
     public Boolean getSort() {
         return sort;
+    }
+
+    public void setSort(Boolean sort) {
+        this.sort = sort;
     }
 
     public SortBuilder getSortBuilder() {
@@ -161,7 +161,9 @@ public class EntityWrapper<T> implements Serializable {
 
     public EntityWrapper<T> like(String column, String value) {
         // 根据 词 不分隔模糊匹配
-        MatchPhraseQueryBuilder whereLikeCql= QueryBuilders.matchPhraseQuery(column,value);
+        //MatchPhraseQueryBuilder whereLikeCql= QueryBuilders.matchPhraseQuery(column,value);  //只能精确
+//        MatchQueryBuilder whereLikeCql = QueryBuilders.matchQuery(column,value);  //只能精确
+        MatchPhrasePrefixQueryBuilder whereLikeCql = QueryBuilders.matchPhrasePrefixQuery(column,value);
         this.boolQueryBuilder.must(whereLikeCql);
         return this;
     }
