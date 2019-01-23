@@ -26,6 +26,7 @@ public class UserController {
     private UserGenerator userGenerator;
 
 
+
     @GetMapping("/info/id")
     public R info(String id){
         return R.ok().put("data",userDao.selectById(id));
@@ -58,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/list/ornew")
-    @ApiModelProperty("根据名称、手机、 性别   精确查 ")
+    @ApiOperation("根据名称、手机、 性别   精确查 ")
     public R listOrNew(String name,String phone,Integer sex){
         return R.ok().put("data",userDao.listByNameOrNewPhoneSex(name,phone,sex));
     }
@@ -113,6 +114,11 @@ public class UserController {
         return R.ok().put("data",userDao.pageByListPhone(phone,page,size));
     }
 
+    @GetMapping("/page")
+    @ApiOperation("分页查全部 ")
+    public R page(int page,int size){
+        return R.ok().put("data",userDao.page(page,size));
+    }
 
     @PostMapping("/add")
     @ApiOperation("索引新数据")
@@ -120,6 +126,13 @@ public class UserController {
         user.setId(UUIDGenerate.create());
         userDao.addUser(user);
         return R.ok().put("data",user);
+    }
+
+
+    @PostMapping("/test")
+    @ApiOperation("test")
+    public R test(@RequestBody User user){
+        return R.ok();
     }
 
 }

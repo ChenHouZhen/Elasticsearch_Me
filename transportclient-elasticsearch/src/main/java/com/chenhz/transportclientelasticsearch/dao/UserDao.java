@@ -117,4 +117,11 @@ public class UserDao extends EsBaseDao<User>{
         );
     }
 
+    public PageUtils page(int page, int size){
+        return this.selectPage(
+                new EntityWrapper<User>(),new Page<>(page,size)
+        );
+    }
+
+
 }

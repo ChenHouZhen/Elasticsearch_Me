@@ -30,14 +30,14 @@ public class EsConfig {
             Settings esSetting = Settings.builder()
                     .put("cluster.name",esConfigProps.getEs().getCluster())
                     .put("client.transport.ping_timeout", "60s")
-                //    .put("client.transport.sniff",true)//增加嗅探机制，找到ES集群
+                  //  .put("client.transport.sniff",true)//增加嗅探机制，找到ES集群
 //                    .put("thread_pool.search.size",Integer.parseInt(poolSize))//增加线程池个数，暂时设为5 推荐算法：int（（ 核心数 ＊ 3 ）／ 2 ）＋ 1
                     .build();
 
             transportClient = new PreBuiltTransportClient(esSetting);
-            TransportAddress transportAddress = new TransportAddress(
-                    InetAddress.getByName(esConfigProps.getEs().getIp()),esConfigProps.getEs().getPort());
-            transportClient.addTransportAddresses(transportAddress);
+            transportClient.addTransportAddresses(new TransportAddress(InetAddress.getByName(esConfigProps.getEs().getIp()),esConfigProps.getEs().getPort()));
+            /*.addTransportAddress(new TransportAddress(InetAddress.getByName("10.0.83.233"),9300)).
+            addTransportAddress(new TransportAddress(InetAddress.getByName("10.0.83.233"),9302));*/
         } catch (UnknownHostException e) {
             log.error("Elasticsearch TransportClient create ERROR !",e);
         }
