@@ -21,7 +21,6 @@ public class User {
 
     private String phone;
 
-    @Digits(integer=2000,fraction=2000)
     private Integer age;
 
     private Integer sex;

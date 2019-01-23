@@ -129,10 +129,5 @@ public class UserController {
     }
 
 
-    @PostMapping("/test")
-    @ApiOperation("test")
-    public R test(@RequestBody User user){
-        return R.ok();
-    }
 
 }
